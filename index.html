@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的赛博修行空间</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: "Microsoft YaHei", sans-serif; }
+        canvas { display: block; }
+        #overlay {
+            position: absolute; top: 20px; width: 100%; text-align: center;
+            color: #ffd700; font-size: 20px; text-shadow: 0 0 10px gold;
+            pointer-events: none; letter-spacing: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay">功德之雨 · 正在降临</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.onresize = resize;
+        resize();
+
+        // 这里你可以随意修改你想落下的文字
+        const words = ["🙏", "功德+1", "✨", "平安", "喜乐", "福", "Lucky"];
+        const fontSize = 20;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function draw() {
+            // 营造拖尾残影
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = fontSize + "px serif";
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = words[Math.floor(Math.random() * words.length)];
+                
+                // 让第一行亮一点，像流星一样
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = "#ffd700";
+                ctx.fillStyle = "#fff"; 
+                
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 50);
+    </script>
+</body>
+</html>
